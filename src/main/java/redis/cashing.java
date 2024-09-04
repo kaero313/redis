@@ -26,12 +26,24 @@ public class cashing {
     @Value("${redis.password}")
     private String redisPassword;
 
+    private static JedisPoolConfig jedisPoolConfig = null;
+    private static JedisPool pool = null;
+
+    private void connect() {
+
+        if(jedisPoolConfig == null){
+            jedisPoolConfig = new JedisPoolConfig();
+        }
+
+        if(pool == null){
+            pool = new JedisPool(jedisPoolConfig, redisHost, redisPort, 3000, redisPassword, 5);
+        }
+    }
+
     @RequestMapping(value = "add", method = {RequestMethod.POST})
     public void add(@RequestBody String request){
 
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        JedisPool pool = new JedisPool(jedisPoolConfig, redisHost, redisPort, 3000, redisPassword, 5);
-
+        connect();
         Jedis jedis = pool.getResource();
 
         JSONObject jsonobj = new JSONObject(request);
@@ -55,5 +67,4 @@ public class cashing {
     }
 
 
-    
 }
