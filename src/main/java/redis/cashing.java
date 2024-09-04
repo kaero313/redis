@@ -3,6 +3,7 @@ package redis;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import redis.clients.jedis.Jedis;
@@ -25,21 +26,23 @@ public class cashing {
     @Value("${redis.password}")
     private String redisPassword;
 
-    @RequestMapping(value = "add", method = {RequestMethod.GET})
-    public void con(){
+    @RequestMapping(value = "add", method = {RequestMethod.POST})
+    public void add(@RequestBody String request){
 
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         JedisPool pool = new JedisPool(jedisPoolConfig, redisHost, redisPort, 3000, redisPassword, 5);
 
         Jedis jedis = pool.getResource();
 
-        String redisKey = "keytest";
+        JSONObject jsonobj = new JSONObject(request);
+
+        String redisKey = jsonobj.getString("key");
 
         JSONObject json = new JSONObject();
-        json.put("redirect_uri", "aa");
-        json.put("sns_type", "snsType");
-        json.put("state", "commnunityState");
-        json.put("company", "company");
+        json.put("redirect_uri", jsonobj.get("redirect_uri"));
+        json.put("id", jsonobj.get("id"));
+        json.put("pw", jsonobj.get("pw"));
+        json.put("name", jsonobj.get("name"));
 
         jedis.set(redisKey, String.valueOf(json));
 
