@@ -10,6 +10,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/redis")
 public class cashing {
@@ -40,8 +42,8 @@ public class cashing {
         }
     }
 
-    @RequestMapping(value = "add", method = {RequestMethod.POST})
-    public void add(@RequestBody String request){
+    @RequestMapping(value = "set", method = {RequestMethod.POST})
+    public void set(@RequestBody String request){
 
         connect();
         Jedis jedis = pool.getResource();
@@ -62,7 +64,19 @@ public class cashing {
             jedis.close();
         }
 
-        pool.close();
+    }
+
+    @RequestMapping(value = "get", method = {RequestMethod.GET})
+    public void get(HttpServletRequest request){
+
+        connect();
+        Jedis jedis = pool.getResource();
+
+        System.out.println(jedis.get(request.getParameter("key")));
+
+        if (jedis != null) {
+            jedis.close();
+        }
 
     }
 
