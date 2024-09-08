@@ -63,7 +63,6 @@ public class cashing {
         if (jedis != null) {
             jedis.close();
         }
-
     }
 
     @RequestMapping(value = "get", method = {RequestMethod.GET})
@@ -77,7 +76,19 @@ public class cashing {
         if (jedis != null) {
             jedis.close();
         }
+    }
 
+    @RequestMapping(value = "del", method = {RequestMethod.DELETE})
+    public void del(HttpServletRequest request){
+
+        connect();
+        Jedis jedis = pool.getResource();
+
+        System.out.println(jedis.del(request.getParameter("key")));
+
+        if (jedis != null) {
+            jedis.close();
+        }
     }
 
 
