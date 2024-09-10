@@ -115,4 +115,22 @@ public class cashing {
         }
     }
 
+    @RequestMapping(value = "lpush", method = {RequestMethod.POST})
+    public void lpush(@RequestBody String request){
+
+        connect();
+        Jedis jedis = pool.getResource();
+
+        JSONObject jsonobj = new JSONObject(request);
+
+        String redisKey = jsonobj.getString("key");
+
+        jedis.lpush(redisKey, jsonobj.getString("value"));
+
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
+
+
 }
