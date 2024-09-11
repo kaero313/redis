@@ -145,6 +145,17 @@ public class cashing {
         }
     }
 
+    @RequestMapping(value = "rpop", method = {RequestMethod.GET})
+    public void rpop(HttpServletRequest request){
 
+        connect();
+        Jedis jedis = pool.getResource();
+
+        System.out.println(jedis.rpop(request.getParameter("key")));
+
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
 
 }
