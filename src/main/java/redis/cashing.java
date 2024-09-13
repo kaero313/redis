@@ -158,4 +158,20 @@ public class cashing {
         }
     }
 
+    @RequestMapping(value = "sadd", method = {RequestMethod.POST})
+    public void sadd(@RequestBody String request){
+
+        connect();
+        Jedis jedis = pool.getResource();
+
+        JSONObject jsonobj = new JSONObject(request);
+
+        jedis.sadd(jsonobj.getString("key"), jsonobj.getString("value"));
+
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
+
+
 }
