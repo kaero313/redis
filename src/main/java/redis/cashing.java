@@ -173,5 +173,17 @@ public class cashing {
         }
     }
 
+    @RequestMapping(value = "smembers", method = {RequestMethod.GET})
+    public void smembers(HttpServletRequest request){
+
+        connect();
+        Jedis jedis = pool.getResource();
+
+        System.out.println(jedis.smembers(request.getParameter("key")));
+
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
 
 }
