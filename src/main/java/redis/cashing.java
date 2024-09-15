@@ -11,6 +11,8 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/redis")
@@ -180,6 +182,23 @@ public class cashing {
         Jedis jedis = pool.getResource();
 
         System.out.println(jedis.smembers(request.getParameter("key")));
+
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
+
+    @RequestMapping(value = "hset", method = {RequestMethod.POST})
+    public void hset(@RequestBody String request){
+
+        connect();
+        Jedis jedis = pool.getResource();
+
+        JSONObject jsonobj = new JSONObject(request);
+
+        jedis.hset(jsonobj.getString("key"),
+                jsonobj.getString("field"),
+                jsonobj.getString("value"));
 
         if (jedis != null) {
             jedis.close();
