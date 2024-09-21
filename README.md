@@ -35,5 +35,19 @@
 ![image](https://github.com/user-attachments/assets/443a61a9-dbfe-4f22-89c1-2a4a6960d144)
 > Master는 1개 이상의 Slave를 가질 수 있다
 
-- Slave는 Master의 데이터를 실시간으로 전달받아 저장한다.
-- Master가 다운 시 Slave가 이를 대신할 수 있다.(수동으로 변경해야 함)
+- Slave는 Master의 데이터를 실시간으로 전달받아 저장한다
+- Master가 다운 시 Slave가 이를 대신할 수 있다(수동으로 변경해야 함)
+
+<br/>
+
+<h4>4-2. Master-Slave(Replica) + Sentinel 구성</h4>
+
+![image](https://github.com/user-attachments/assets/11a4f295-ef2f-46e3-a818-4a7e41f7a2fc)
+> Sentinel을 각 서버에 한 대씩 설치하여 3대 이상의 홀수를 유지한다
+
+- 센티널은 각 서버를 감시하고 있다가 마스터가 다운되면 과반수가 투표된 슬레이브를 마스터로 승격시킨다(홀수를 맞춰야 하는 이유)
+- 다운되었던 마스터가 다시 시작되면 센티널이 슬레이브로 전환시킨다
+- 레디스는 마스터가 모든 데이터를 가지고있기 때문에 슬레이브는 마스터의 복제본을 유지하고 있을 뿐이며, 데이터를 분산하지 않는다
+- 따라서 장애가 발생하는 동안의 내용들을 완벽히 보장할 수는 없다
+- 센티널은 데이터를 처리하지 않고 감시 역할만 한다
+- 고가용성과 자동 Failover를 지원한다
