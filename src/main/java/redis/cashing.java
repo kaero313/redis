@@ -205,4 +205,17 @@ public class cashing {
         }
     }
 
+    @RequestMapping(value = "hget", method = {RequestMethod.GET})
+    public void hget(HttpServletRequest request){
+
+        connect();
+        Jedis jedis = pool.getResource();
+
+        System.out.println(jedis.hget(request.getParameter("key"), request.getParameter("field")));
+
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
+
 }
